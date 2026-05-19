@@ -8,7 +8,7 @@ Works on macOS, Linux (GNOME, KDE) with no external dependencies.
 **lazy.nvim**
 ```lua
 {
-  "your-user/theme-sync.nvim",
+  "WantDead/theme-sync.nvim",
   opts = {
     dark  = "tokyonight-night",
     light = "tokyonight-day",
