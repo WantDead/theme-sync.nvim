@@ -26,6 +26,14 @@ Works on macOS, Linux (GNOME, KDE) with no external dependencies.
 | `on_change`     | `fun(mode: "dark"\|"light")`  | `nil`   | Custom apply override                    |
 | `poll_interval` | `integer` (ms)                | `0`     | Poll interval, `0` = disabled            |
 
+## Health check
+
+```
+:checkhealth theme-sync
+```
+
+Reports detected OS, current mode, active backend, and poll timer status.
+
 ## NvChad
 
 Use `on_change` to hook into base46:

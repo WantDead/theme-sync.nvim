@@ -8,6 +8,7 @@ local M = {}
 ---@field poll_interval? integer ms between polls, 0 = disabled (default)
 
 local _initialized = false
+M._opts = nil
 
 ---@param opts? ThemeSyncOpts
 M.setup = function(opts)
@@ -15,6 +16,7 @@ M.setup = function(opts)
   _initialized = true
 
   opts = vim.tbl_extend("force", { poll_interval = 0 }, opts or {})
+  M._opts = opts
 
   if (opts.dark == nil) ~= (opts.light == nil) then
     vim.notify("theme-sync: set both 'dark' and 'light', or neither", vim.log.levels.WARN)
@@ -30,5 +32,9 @@ M.setup = function(opts)
 
   require("theme-sync.trigger").init(opts)
 end
+
+vim.api.nvim_create_user_command("ThemeSyncHealth", function()
+  vim.cmd("checkhealth theme-sync")
+end, {})
 
 return M
