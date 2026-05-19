@@ -1,0 +1,43 @@
+*theme-sync.txt*  Auto-sync Neovim colorscheme with OS dark/light mode
+
+==============================================================================
+INTRODUCTION                                           *theme-sync*
+
+theme-sync.nvim automatically switches your Neovim colorscheme when the
+operating system appearance changes.
+
+==============================================================================
+SETUP                                                  *theme-sync-setup*
+
+>lua
+  require("theme-sync").setup({
+    dark  = "tokyonight-night",
+    light = "tokyonight-day",
+  })
+<
+
+==============================================================================
+OPTIONS                                                *theme-sync-options*
+
+All options are optional.
+
+dark ~
+  Colorscheme name to use in dark mode.
+
+light ~
+  Colorscheme name to use in light mode.
+
+detect ~
+  `fun(): "dark"|"light"`
+  Override OS detection with a custom function.
+
+on_change ~
+  `fun(mode: "dark"|"light")`
+  Override theme application entirely (e.g. for NvChad).
+
+poll_interval ~
+  Integer milliseconds between polls. `0` disables polling (default).
+  Useful on systems where focus events are unreliable.
+
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:
