@@ -1,7 +1,7 @@
 # theme-sync.nvim
 
 Automatically syncs your Neovim colorscheme with the OS dark/light mode.
-Works on macOS, Linux (GNOME, KDE), and Windows — with no external dependencies.
+Works on macOS, Linux (GNOME, KDE) with no external dependencies.
 
 ## Install
 

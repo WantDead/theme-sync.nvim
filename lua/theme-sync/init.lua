@@ -7,8 +7,28 @@ local M = {}
 ---@field on_change? fun(mode: "dark"|"light") custom apply override
 ---@field poll_interval? integer ms between polls, 0 = disabled (default)
 
+local _initialized = false
+
 ---@param opts? ThemeSyncOpts
 M.setup = function(opts)
+  if _initialized then return end
+  _initialized = true
+
+  opts = vim.tbl_extend("force", { poll_interval = 0 }, opts or {})
+
+  if (opts.dark == nil) ~= (opts.light == nil) then
+    vim.notify("theme-sync: set both 'dark' and 'light', or neither", vim.log.levels.WARN)
+  end
+
+  if opts.detect then
+    local detect = require("theme-sync.detect")
+    local orig = detect.get
+    detect.get = function()
+      return opts.detect() or orig()
+    end
+  end
+
+  require("theme-sync.trigger").init(opts)
 end
 
 return M

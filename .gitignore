@@ -1,0 +1,9 @@
+plan.md
+tests/
+test.md
+
+# macOS
+.DS_Store
+
+# compiled Lua bytecode
+*.luac
