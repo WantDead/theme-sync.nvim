@@ -1,8 +1,16 @@
 local M = {}
 
+local _mode = nil
+
+---@return "dark"|"light"|nil
+M.current = function()
+  return _mode
+end
+
 ---@param mode "dark"|"light"
 ---@param opts ThemeSyncOpts
 M.set = function(mode, opts)
+  _mode = mode
   if opts.on_change then
     opts.on_change(mode)
     return
