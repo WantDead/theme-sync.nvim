@@ -1,43 +1,145 @@
 *theme-sync.txt*  Auto-sync Neovim colorscheme with OS dark/light mode
 
+Author:   WantDead
+License:  MIT
+Repo:     https://github.com/WantDead/theme-sync.nvim
+
 ==============================================================================
-INTRODUCTION                                           *theme-sync*
+CONTENTS                                              *theme-sync-contents*
+
+  1. Introduction ................................ |theme-sync-intro|
+  2. Setup ........................................ |theme-sync-setup|
+  3. Options ...................................... |theme-sync-options|
+  4. Supported systems ........................... |theme-sync-systems|
+  5. NvChad ....................................... |theme-sync-nvchad|
+  6. Health check ................................ |theme-sync-health|
+
+==============================================================================
+1. INTRODUCTION                                          *theme-sync-intro*
 
 theme-sync.nvim automatically switches your Neovim colorscheme when the
-operating system appearance changes.
+operating system appearance changes between dark and light mode.
+
+Detection runs on startup and on every |FocusGained| event. An optional
+poll timer is available for setups where focus events are unreliable.
 
 ==============================================================================
-SETUP                                                  *theme-sync-setup*
+2. SETUP                                                 *theme-sync-setup*
 
+With a colorscheme pair:
 >lua
   require("theme-sync").setup({
-    dark  = "tokyonight-night",
+    dark  = "tokyonight",
     light = "tokyonight-day",
   })
 <
 
+Background only (no colorscheme switching):
+>lua
+  require("theme-sync").setup()
+<
+
+lazy.nvim:
+>lua
+  {
+    "WantDead/theme-sync.nvim",
+    lazy = false,
+    opts = { dark = "tokyonight", light = "tokyonight-day" },
+  }
+<
+
+mini.deps:
+>lua
+  require("mini.deps").add("WantDead/theme-sync.nvim")
+  require("theme-sync").setup({ dark = "tokyonight", light = "tokyonight-day" })
+<
+
+vim.pack / built-in packages:
+>bash
+  git clone https://github.com/WantDead/theme-sync.nvim \
+    ~/.local/share/nvim/site/pack/plugins/start/theme-sync.nvim
+<
+
+The plugin auto-loads with default settings. To configure a colorscheme pair,
+add this to your init.lua:
+>lua
+  require("theme-sync").setup({ dark = "tokyonight", light = "tokyonight-day" })
+<
+
 ==============================================================================
-OPTIONS                                                *theme-sync-options*
+3. OPTIONS                                             *theme-sync-options*
 
 All options are optional.
 
+                                                       *theme-sync-opt-dark*
 dark ~
-  Colorscheme name to use in dark mode.
+  Type: `string`
+  Colorscheme name to apply in dark mode.
 
+                                                      *theme-sync-opt-light*
 light ~
-  Colorscheme name to use in light mode.
+  Type: `string`
+  Colorscheme name to apply in light mode.
+  Note: `dark` and `light` must both be set, or neither.
 
+                                                     *theme-sync-opt-detect*
 detect ~
-  `fun(): "dark"|"light"`
-  Override OS detection with a custom function.
+  Type: `fun(): "dark"|"light"`
+  Replace the built-in OS detection with a custom function.
 
+                                                  *theme-sync-opt-on_change*
 on_change ~
-  `fun(mode: "dark"|"light")`
-  Override theme application entirely (e.g. for NvChad).
+  Type: `fun(mode: "dark"|"light")`
+  Replace the built-in apply logic entirely. When set, `dark`, `light`,
+  and `vim.o.background` are not touched — full control is yours.
 
+                                               *theme-sync-opt-poll_interval*
 poll_interval ~
-  Integer milliseconds between polls. `0` disables polling (default).
-  Useful on systems where focus events are unreliable.
+  Type: `integer` (milliseconds)
+  Default: `0` (disabled)
+  Run detection on a repeating timer. Useful when |FocusGained| does not
+  fire reliably (e.g. inside tmux or some terminal emulators).
+
+==============================================================================
+4. SUPPORTED SYSTEMS                                   *theme-sync-systems*
+
+  macOS   `/usr/bin/defaults read -g AppleInterfaceStyle`
+  GNOME   `gsettings get org.gnome.desktop.interface color-scheme`
+  KDE     `kreadconfig5 --group General --key ColorScheme --file kdeglobals`
+
+On Linux, GNOME is tried first. If `gsettings` returns nothing, KDE is
+tried. If neither returns a result, dark mode is assumed.
+
+==============================================================================
+5. NVCHAD                                              *theme-sync-nvchad*
+
+NvChad uses its own base46 theme engine which bypasses `vim.o.background`.
+Use `on_change` to hook into it directly:
+>lua
+  require("theme-sync").setup({
+    on_change = function(mode)
+      require("nvconfig").base46.theme = mode == "dark"
+        and "github_dark"
+        or  "github_light"
+      require("base46").load_all_highlights()
+    end,
+  })
+<
+
+==============================================================================
+6. HEALTH CHECK                                        *theme-sync-health*
+
+Run the built-in health check to verify detection and configuration:
+>
+  :checkhealth theme-sync
+<
+
+Reports:
+  - Detected OS
+  - Current mode returned by detection
+  - Active mode (last applied)
+  - Active backend (on_change / colorscheme pair / background only)
+  - Poll timer status
 
 ==============================================================================
  vim:tw=78:ts=8:ft=help:norl:

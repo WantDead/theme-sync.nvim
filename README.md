@@ -9,11 +9,29 @@ Works on macOS, Linux (GNOME, KDE) with no external dependencies.
 ```lua
 {
   "WantDead/theme-sync.nvim",
+  lazy = false,
   opts = {
-    dark  = "tokyonight-night",
+    dark  = "tokyonight",
     light = "tokyonight-day",
   },
 }
+```
+
+**mini.deps**
+```lua
+require("mini.deps").add("WantDead/theme-sync.nvim")
+require("theme-sync").setup({ dark = "tokyonight", light = "tokyonight-day" })
+```
+
+**vim.pack / built-in packages**
+```bash
+git clone https://github.com/WantDead/theme-sync.nvim \
+  ~/.local/share/nvim/site/pack/plugins/start/theme-sync.nvim
+```
+
+The plugin auto-loads with default settings (background-only sync). To configure a colorscheme pair, add this to your `init.lua`:
+```lua
+require("theme-sync").setup({ dark = "tokyonight", light = "tokyonight-day" })
 ```
 
 ## Options

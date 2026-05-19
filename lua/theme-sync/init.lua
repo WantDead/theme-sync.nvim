@@ -14,6 +14,7 @@ M._opts = nil
 M.setup = function(opts)
   if _initialized then return end
   _initialized = true
+  vim.g.loaded_theme_sync = true
 
   opts = vim.tbl_extend("force", { poll_interval = 0 }, opts or {})
   M._opts = opts
