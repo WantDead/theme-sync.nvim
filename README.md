@@ -3,6 +3,10 @@
 Automatically syncs your Neovim colorscheme with the OS dark/light mode.
 Works on macOS, Linux (GNOME, KDE) with no external dependencies.
 
+<a href="https://dotfyle.com/plugins/WantDead/theme-sync.nvim">
+  <img src="https://dotfyle.com/plugins/WantDead/theme-sync.nvim/shield?style=flat-square" />
+</a>
+
 ## Install
 
 **lazy.nvim**
